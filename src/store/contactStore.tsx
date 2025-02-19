@@ -1,16 +1,17 @@
 import { create } from "zustand";
-import contacts from "../utils/data.json";
 import { Contact } from "../utils/types";
 
 interface ContactState {
     contacts: Contact[]
+    getContact: (contactID: string) => Contact | undefined
     addContact: (contact: Contact) => void
     updateContact: (contact: Contact) => void
     deleteContact: (contactID: string) => void
 }
 
-const useContactStore = create<ContactState>((set) => ({
-    contacts: contacts,
+const useContactStore = create<ContactState>((set, get) => ({
+    contacts: [],
+    getContact: (contactID: string) => get().contacts.find(contact => contact.ID === contactID),
     addContact: (contact: Contact) => set((state) => ({
         ...state,
         contacts: [...state.contacts, contact]
